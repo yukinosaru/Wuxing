@@ -4,8 +4,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.*;
-import java.io.*;
 import android.util.Log;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.content.Context;
 
@@ -178,7 +182,44 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String[] zodiac = {"element","tianGan","","animal","diZhi",""};
         int nominal_year = year;
-        // Do a check to see if actual DOB is before that years start_date and adjust accordingly
+
+        // If month is Jan or Feb then check to see if actual DOB is before that years start_date and adjust accordingly
+        if (month < 2){
+            Log.d("Border Date",Integer.toString(month));
+            if(myDataBase.isOpen()){
+                String queryStartDate = "SELECT " + TABLE_YEARS + "." + KEY_START_DATE +
+                        " FROM " + TABLE_YEARS +
+                        " WHERE " + TABLE_YEARS + "." + KEY_NOMINAL_YEAR + "=" + nominal_year;
+
+                Log.d("Start Date query", queryStartDate);
+
+                Cursor cursorStartDate = myDataBase.rawQuery(queryStartDate,null);
+                if (cursorStartDate != null) {
+                    cursorStartDate.moveToFirst();
+                    Long startDate = cursorStartDate.getLong(0);
+
+                    // Parse input date into Unix
+                    String str_date = Integer.toString(dayOfMonth) + "-" + Integer.toString(month+1) + "-" + Integer.toString(year);
+                    DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date = new Date();
+                    try {
+                        date = (Date) formatter.parse(str_date);
+                    } catch(ParseException e){
+                        throw new Error("Error parsing date when checking");
+                    }
+
+                    Long inputDate = date.getTime()/1000;
+
+                    Log.d("Start Date",Long.toString(startDate));
+                    Log.d("Input Date",Long.toString(inputDate));
+
+                    if (inputDate < startDate){
+                        nominal_year = year - 1;
+                        Log.d("Year",Integer.toString(nominal_year));
+                    }
+                }
+            }
+        }
 
         if(myDataBase.isOpen()){
             String query = "SELECT " + TABLE_YEARS + "." + KEY_NOMINAL_YEAR +", " +
@@ -192,7 +233,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     " JOIN " + TABLE_ELEMENTS + " ON " + TABLE_ELEMENTS + "." + KEY_STEM + "=" + TABLE_YEARS + "." + KEY_ELEMENT +
                     " JOIN " + TABLE_ANIMALS + " ON " + TABLE_ANIMALS + "." + KEY_STEM + "=" + TABLE_YEARS + "." + KEY_ANIMAL +
                     " WHERE " + TABLE_YEARS + "." + KEY_NOMINAL_YEAR + "=" + nominal_year;
-            Log.d("Query",query);
 
             Cursor cursor = myDataBase.rawQuery(query,null);
             if (cursor!=null) {
