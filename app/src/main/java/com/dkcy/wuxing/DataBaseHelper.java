@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.*;
 import java.io.*;
-import java.util.ArrayList;
+import android.util.Log;
 
 import android.content.Context;
 
@@ -38,6 +38,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ANIMAL = "animal";
     private static final String KEY_EARTHLY_BRANCH = "di_zhi";
     private static final String KEY_NOMINAL_YEAR = "nominal_year";
+    private static final String KEY_DESCRIPTION = "desc";
     private static final String KEY_START_DATE = "start_date";
     private static final String KEY_END_DATE = "end_date";
 
@@ -175,7 +176,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     // Lookup date of birth
     public String[] lookupDateOfBirth(int year, int month, int dayOfMonth) {
 
-        String[] zodiac = {"element","tianGan","animal","diZhi"};
+        String[] zodiac = {"element","tianGan","","animal","diZhi",""};
         int nominal_year = year;
         // Do a check to see if actual DOB is before that years start_date and adjust accordingly
 
@@ -183,12 +184,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             String query = "SELECT " + TABLE_YEARS + "." + KEY_NOMINAL_YEAR +", " +
                     TABLE_ELEMENTS + "." + KEY_ELEMENT + ", " +
                     TABLE_ELEMENTS + "." + KEY_HEAVENLY_STEM + ", " +
+                    TABLE_ELEMENTS + "." + KEY_DESCRIPTION + ", " +
                     TABLE_ANIMALS + "." + KEY_ANIMAL + ", " +
-                    TABLE_ANIMALS + "." + KEY_EARTHLY_BRANCH +
+                    TABLE_ANIMALS + "." + KEY_EARTHLY_BRANCH + ", " +
+                    TABLE_ANIMALS + "." + KEY_DESCRIPTION + " AS animal_desc" +
                     " FROM " + TABLE_YEARS +
                     " JOIN " + TABLE_ELEMENTS + " ON " + TABLE_ELEMENTS + "." + KEY_STEM + "=" + TABLE_YEARS + "." + KEY_ELEMENT +
                     " JOIN " + TABLE_ANIMALS + " ON " + TABLE_ANIMALS + "." + KEY_STEM + "=" + TABLE_YEARS + "." + KEY_ANIMAL +
                     " WHERE " + TABLE_YEARS + "." + KEY_NOMINAL_YEAR + "=" + nominal_year;
+            Log.d("Query",query);
 
             Cursor cursor = myDataBase.rawQuery(query,null);
             if (cursor!=null) {
@@ -199,6 +203,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 zodiac[1] = cursor.getString(2);
                 zodiac[2] = cursor.getString(3);
                 zodiac[3] = cursor.getString(4);
+                zodiac[4] = cursor.getString(5);
+                zodiac[5] = cursor.getString(6);
                 cursor.close();
             }
         }
