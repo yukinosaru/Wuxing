@@ -2,66 +2,54 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     tools:context="com.dkcy.wuxing.MainActivity">
     <LinearLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="#eeeeee">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:elevation="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/sixt"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="0dp"
-            android:padding="16dp"
-            android:background="#ffffff"
-            android:textSize="24dp"
-            android:text="When were you born?"/>
-        <DatePicker
-            android:id="@+id/date_of_birth"
-            android:layout_width="match_parent"
-            android:layout_height="125dp"
-            android:background="#ffffff"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"
-            android:minDate="01/31/1900"
-            android:maxDate="12/31/2019"/>
+            android:src="@drawable/sixt"
+            android:contentDescription="Hero image"/>
 
         <TextView
             android:id="@+id/zodiac_sign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:layout_margin="8dp"
-            android:elevation="6dp"
-            android:textSize="24sp"
-            android:padding="16dp"/>
+            style="@style/WhiteCard"
+            android:textSize="24sp"/>
         <TextView
             android:id="@+id/animal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:layout_margin="8dp"
-            android:elevation="6dp"
-            android:textSize="16sp"
-            android:padding="16dp"/>
+            android:text="@string/animal_placeholder"
+            style="@style/WhiteCard"
+            android:textSize="16sp"/>
         <TextView
             android:id="@+id/element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:layout_margin="8dp"
-            android:elevation="6dp"
-            android:textSize="16sp"
-            android:padding="16dp"/>
+            android:text="@string/element_placeholder"
+            style="@style/WhiteCard"
+            android:textSize="16sp"/>
         </LinearLayout>
 </ScrollView>

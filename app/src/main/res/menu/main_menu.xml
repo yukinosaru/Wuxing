@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/enter_DOB"
+        android:icon="@drawable/ic_date_range"
+        android:title="@string/enter_DOB"
+        app:showAsAction="always|withText"
+        android:actionLayout="@android:layout/select_dialog_item" >
+    </item>
+</menu>
